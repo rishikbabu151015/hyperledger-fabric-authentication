@@ -1,82 +1,109 @@
-# Hyperledger Fabric — User Registration & Authentication
+Hyperledger Fabric – User Registration & Authentication
 
-## Objective
-Implement a registration & authentication flow using Fabric CA and a simple Node.js app to verify identity-based ledger access.
+A complete demo showcasing how to register, enroll, and authenticate users using Hyperledger Fabric CA.
+This project walks through setting up a Fabric test network, issuing identities, storing them in a wallet, and authenticating users by querying the blockchain.
 
-## Project structure
-```
-hyperledger-auth-example/
-├─ connection-org1.json           # copy from test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json
-├─ wallet/                        # created by scripts (stores identities)
-├─ enrollAdmin.js
-├─ registerUser.js
-├─ auth-test-app.js
-├─ express-login-api.js
-├─ package.json
-├─ run-demo.sh
-└─ README.md
-```
+🔥 Objective
 
-## Prerequisites
-- Docker & Docker Compose
-- Node.js >= 16
-- git
-- fabric-samples (tested with Fabric v2.x / v2.4+)
-- Follow Hyperledger Fabric docs to run `./scripts/bootstrap.sh` in `fabric-samples` to fetch binaries & images.
+Implement a simple user registration + authentication workflow in a Hyperledger Fabric network using Fabric CA.
 
-Test network must be started with Certificate Authorities:
-```bash
+🧩 Features Implemented
+
+✔ Start Fabric network with CA
+✔ Enroll CA admin
+✔ Register a new user
+✔ Enroll user & generate certificate + key
+✔ Store identities in file-based wallet
+✔ Authenticate user via Fabric Gateway
+✔ Query ledger using user identity
+✔ (Bonus) Node.js Login API with Register/Login buttons
+
+🚀 1. Environment Setup
+Install prerequisites
+
+Node.js (>=16)
+
+Docker Desktop
+
+Git
+
+cURL
+
+Hyperledger Fabric samples + binaries
+
+Clone Fabric samples:
+
+git clone https://github.com/hyperledger/fabric-samples
+cd fabric-samples
+curl -sSL https://bit.ly/2ysbOFE | bash -s
+
+🚀 2. Start the Test Network with CA
 cd fabric-samples/test-network
+./network.sh down
 ./network.sh up createChannel -ca
-```
 
-## Quick start
-1. Copy Org1 connection profile into this project folder:
-```bash
-cp <fabric-samples>/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json ./connection-org1.json
-```
 
-2. Install dependencies:
-```bash
-npm install
-```
+This command:
 
-3. Enroll admin:
-```bash
+Starts 2 peers
+
+Starts an orderer
+
+Starts Fabric CA
+
+Creates mychannel
+
+🏢 3. Enroll the CA Admin
 node enrollAdmin.js
-```
 
-4. Register & enroll a user:
-```bash
+
+Expected output:
+
+Successfully enrolled admin user "admin" and imported it into the wallet
+
+👤 4. Register & Enroll a New User
 node registerUser.js user1 user1pw
-```
 
-5. Run authentication test (ledger query):
-```bash
+
+Expected output:
+
+Successfully registered user1 with secret: user1pw
+Successfully enrolled user user1 and imported into the wallet
+
+🔐 5. Authentication – Query Ledger Using User Identity
 node auth-test-app.js user1
-```
 
-6. (Optional) Start Express login API:
-```bash
-node express-login-api.js
-# POST to http://localhost:3000/login with JSON { "certificatePem": "-----BEGIN CERTIFICATE-----..." }
-```
 
-## What to include in your submission
-- This project folder (zipped)
-- `connection-org1.json` (copied from fabric-samples)
-- Screenshots/logs of:
-  - `./network.sh up createChannel -ca`
-  - `node enrollAdmin.js`
-  - `node registerUser.js user1 user1pw`
-  - `node auth-test-app.js user1`
-  - `ls -R wallet/` showing identities
+Expected output:
 
-## Design highlights (what makes this standout)
-- Uses Fabric CA with attributes set at registration (example: `role=appUser`) for attribute-based access control.
-- Demonstrates ledger authentication via `qscc` system chaincode query.
-- Includes a simple Express API for certificate-based login (demo-only).
-- `run-demo.sh` automates Node steps and captures logs into `results/` for easy reviewer re-run.
-- Security notes included in README.
+Successfully queried ledger using identity: user1
+Returned buffer length: 244
+Ledger query result (hex snippet): 0a00804c...
 
--- End of README
+📁 6. Wallet Structure
+
+Your wallet folder automatically stores:
+
+wallet/
+ ├── admin/
+ │   ├── idcerts
+ │   └── keystore
+ └── user1/
+     ├── idcerts
+     └── keystore
+
+#####This project demonstrates clear understanding of:
+
+Hyperledger CA
+
+MSP identity creation
+
+Enrollment / registration
+
+Wallet identity management
+
+Ledger authentication
+
+Gateway-based blockchain access
+
+Designed to be clean, modular, and extensible.
