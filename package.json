@@ -1,0 +1,18 @@
+{
+  "name": "hyperledger-auth-example",
+  "version": "1.0.0",
+  "description": "Fabric CA registration & authentication demo",
+  "main": "auth-test-app.js",
+  "scripts": {
+    "enrollAdmin": "node enrollAdmin.js",
+    "registerUser": "node registerUser.js user1 user1pw",
+    "authTest": "node auth-test-app.js user1",
+    "startApi": "node express-login-api.js"
+  },
+  "dependencies": {
+    "fabric-ca-client": "^2.2.0",
+    "fabric-network": "^2.2.0",
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2"
+  }
+}
